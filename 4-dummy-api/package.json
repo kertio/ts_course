@@ -1,0 +1,23 @@
+{
+  "name": "4-dummy-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "npx nodemon main.ts",
+    "build": "tsc main.ts",
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2"
+  }
+}
