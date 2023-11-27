@@ -32,8 +32,8 @@ interface IAddress {
 	state: string;
 }
 
-interface ICompany {
-	address: IAddress;
+interface ICompany extends IAddress {
+	// address: IAddress;
 	department: string;
 	name: string;
 	title: string;
@@ -58,7 +58,7 @@ interface IUser {
 	lastName: string;
 	maidenName: string;
 	age: number;
-	gender: GENDER | null;
+	gender: GENDER;
 	email: TEmail;
 	phone: TPhone;
 	username: string;
@@ -97,40 +97,40 @@ function isGender(g: string): g is GENDER {
  * @returns array of IUser object
  */
 function convertRawToUser(rawJSONasString: string): IUser[] {
-	let user: IUser[] = [];
-	const rawObj = JSON.parse(rawJSONasString)?.users;
+	const user: IUser[] = [];
+	const rawObj = JSON.parse(rawJSONasString)?.users as IUser[];
 
 	if (!rawObj) throw new Error('Нет данных для обработки');
 
 	for (const el of rawObj) {
 		user.push({
-			id: el.id as number,
-			firstName: el.firstName as string,
-			lastName: el.lastName as string,
-			maidenName: el.maidenName as string,
-			age: el.age as number,
-			gender: isGender(el.gender) ? GENDER[el.gender as GENDER] : null,
-			email: el.email as TEmail,
-			phone: el.phone as TPhone,
-			username: el.username as string,
-      password: el.password as string,
-      birthDate: el.birthDate as Date,
-      image: el.image as TUrl,
-      bloodGroup: el.bloodGroup as string,
-      height: el.height as number,
-			weight: el.weight as number,
-      eyeColor: el.eyeColor as string,
-      hair: el.hair as IHair,
-      domain: el.domain as TUrl,
-			ip: el.ip as TIp,
-			address: el.address as IAddress,
-			macAddress: el.macAddress as string,
-			university: el.university as string,
-			bank: el.bank as IBank,
-			company: el.company as ICompany,
-			ein: el.ein as string,
-			ssn: el.ssn as string,
-			userAgent: el.userAgent as string
+			id: el.id,
+			firstName: el.firstName,
+			lastName: el.lastName,
+			maidenName: el.maidenName,
+			age: el.age,
+			gender: isGender(el.gender) ? GENDER[el.gender as GENDER] : '',
+			email: el.email,
+			phone: el.phone,
+			username: el.username,
+      password: el.password,
+      birthDate: el.birthDate,
+      image: el.image,
+      bloodGroup: el.bloodGroup,
+      height: el.height,
+			weight: el.weight,
+      eyeColor: el.eyeColor,
+      hair: el.hair,
+      domain: el.domain,
+			ip: el.ip,
+			address: el.address,
+			macAddress: el.macAddress,
+			university: el.university,
+			bank: el.bank,
+			company: el.company,
+			ein: el.ein,
+			ssn: el.ssn,
+			userAgent: el.userAgent
 		} as IUser)
 	}
 
@@ -142,10 +142,11 @@ function printUserInfo(user: IUser) {
 		chalk.grey(user.firstName),
 		chalk.underline(user.email),
 		user.address,
+		chalk.underline(user.gender),
 	);
 }
 
-async function __main(url: TUrl): Promise<IUser []> {
+async function main(url: TUrl): Promise<IUser []> {
 	const resp = await fetch(url);
 	if (!resp.ok) {
 		throw new Error('Ошибка получения данных');
@@ -162,7 +163,7 @@ const url: TUrl = 'https://dummyjson.com/users';
 /**
  *  			main
 */
-__main(url)
+main(url)
 	.then((users: IUser[]) => {
 			users.forEach( (item: IUser)  => {
 			printUserInfo(item);
